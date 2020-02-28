@@ -48,15 +48,23 @@ function findPercentage()
    }
 }
 read -p  "How many time you flip coin" flipCoin
-read -p "Combination Single press 1) double press 2)" choice
+read -p "Combination Single press 1) double press 2) Tripal press 3)" choice
 
 if [ $choice -eq 1 ]
 then
    combination $flipCoin $choice
    findPercentage
-else
+elif [ $choice -eq 2 ]
+then
    combination $flipCoin $choice
    findPercentage
    echo "$findPercentage"
+elif [ $choice  -eq 3 ]
+then
+   combination $flipCoin $choice
+   findPercentage
+else
+   printf "Please Enter a Right Choice" 
 fi
+
 
