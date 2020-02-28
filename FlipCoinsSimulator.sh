@@ -17,19 +17,46 @@ else
 	printf "Tail"
 fi
 
-# Find percentage of the singlet combination
-for (( index=1; index<=10; index++ ))
-do
-	random1=$(( RANDOM%2 ))
-	if [ $random1 -eq $HEAD ]
-   then
-   	dictionary[$index]=Head
-		(( ++count ))
-	else
-   	dictionary[$index]=Tail
-	fi
+declare -A dictionary
+function combination(){
+   for (( index=0; index<$1; index++ ))
+   do
+      merg=""
+      for (( index1=0; index1<$2; index1++ ))
+      do
+         random=$((RANDOM%2))
+         if [ $random -eq $HEAD ]
+         then
+            merg+=H
+         else
+            merg+=T
+         fi
+      done
+      dictionary[$merg]=$(( ${dictionary[$merg]}+1 ))
+   done
+   echo "All Combination : ${dictionary[@]}"
+   echo  "All keys : ${!dictionary[@]}"
+}
 
-done
-headPercentage=`echo "$count/10*100" | bc -l`
-tailPercentag=`echo "$((10-$count))/10*100 " | bc -l`
+function findPercentage()
+{
+   for keys in ${!dictionary[@]}
+   {
+
+      persentage=`echo "scale=2; $((${dictionary[$keys]}))/$flipCoin*100 " | bc`
+      echo  "$keys =  $persentage"
+   }
+}
+read -p  "How many time you flip coin" flipCoin
+read -p "Combination Single press 1) double press 2)" choice
+
+if [ $choice -eq 1 ]
+then
+   combination $flipCoin $choice
+   findPercentage
+else
+   combination $flipCoin $choice
+   findPercentage
+   echo "$findPercentage"
+fi
 
